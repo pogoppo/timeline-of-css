@@ -1,11 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  import type CSSProps from "$lib/repositories/css-properties";
+  import type CSS from "$lib/repositories/css";
   import { createTimeline, type Timeline } from "./_timeline";
   import Milestone from "./_Milestone.svelte";
 
-  export let props: CSSProps;
+  export let items: CSS;
   let history: Timeline;
   let historyGradient: Function;
   const historyGradientFrom: [number, number, number] = [255, 54, 71];
@@ -25,7 +25,7 @@
   }
 
   onMount(async () => {
-    history = createTimeline(props);
+    history = createTimeline(items);
     const historyPathGradient = createGradient(
       historyGradientFrom,
       historyGradientTo,

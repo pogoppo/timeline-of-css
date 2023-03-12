@@ -1,10 +1,10 @@
-import type CSSProps from "$lib/repositories/css-properties";
-import type { Prop } from "$lib/repositories/css-properties";
+import type CSS from "$lib/repositories/css";
+import type { Item } from "$lib/repositories/css";
 
 export type Fragment = {
   version: number;
   releaseDate: Date;
-  props: Prop[]
+  items: Item[]
 }
 
 export type Milestone = {
@@ -14,10 +14,10 @@ export type Milestone = {
 
 export type Timeline = Milestone[];
 
-export const createTimeline = (props: CSSProps) => {
+export const createTimeline = (items: CSS) => {
   const result: Timeline = [];
 
-  for (const item of props.orderByVersion()) {
+  for (const item of items.orderByVersion()) {
     const releaseDate = new Date(item.releaseDate);
     const year = releaseDate.getUTCFullYear();
     const version = item.version;
@@ -27,7 +27,7 @@ export const createTimeline = (props: CSSProps) => {
         {
           version,
           releaseDate,
-          props: [item],
+          items: [item],
         },
       ],
     };
@@ -49,7 +49,7 @@ export const createTimeline = (props: CSSProps) => {
       continue;
     }
 
-    child.props.push(item);
+    child.items.push(item);
   }
 
   return result;

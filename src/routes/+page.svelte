@@ -1,18 +1,18 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  import CSSProps from "$lib/repositories/css-properties";
+  import CSS from "$lib/repositories/css";
   import { createDatabase } from "$lib/db/sqlite";
   import Timeline from "./_Timeline.svelte";
   import TimelineHeader from "./_TimelineHeader.svelte";
 
-  let props: CSSProps;
+  let items: CSS;
   let lastUpdate: Date;
 
   onMount(async () => {
-    const db = await createDatabase("/css_prop_versions.sqlite");
-    props = new CSSProps(db);
-    lastUpdate = props.lastUpdate();
+    const db = await createDatabase("/css.sqlite");
+    items = new CSS(db);
+    lastUpdate = items.lastUpdate();
   });
 </script>
 
@@ -24,8 +24,8 @@
 <TimelineHeader {lastUpdate} />
 
 <main>
-  {#if props}
-    <Timeline {props} />
+  {#if items}
+    <Timeline {items} />
   {/if}
 </main>
 

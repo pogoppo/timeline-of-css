@@ -23,7 +23,7 @@
     </time>
   </div>
   <a
-    href="https://github.com/pogoppo/timeline-of-css-front"
+    href="https://github.com/pogoppo/timeline-of-css"
     class="TimelineHeader__item --align-end"
     style:opacity="0.75"
   >

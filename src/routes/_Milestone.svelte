@@ -3,6 +3,16 @@
 
   export let fragment: Fragment;
 
+  const displayCategoryPrefix = (category: string) => {
+    switch (category) {
+      case "at-rules":
+        return "@";
+      case "selectors":
+        return ":";
+    }
+    return "";
+  };
+
   const displayReleaseDate = (date: Date) => {
     const month = date.toLocaleString("en-US", { month: "2-digit" });
     return `${month}`;
@@ -13,16 +23,16 @@
   <h3 class="Milestone__release">
     {displayReleaseDate(fragment.releaseDate)}
   </h3>
-  <ul class="MilestoneProps">
-    {#each fragment.props as prop}
-      <li class="MilestoneProps__item">
+  <ul class="MilestoneList">
+    {#each fragment.items as item}
+      <li class="MilestoneList__item">
         <a
-          href={prop.link}
+          href={item.link}
           target="_blank"
           rel="noopener"
-          class="MilestoneProps__link"
+          class="MilestoneList__link"
         >
-          {prop.name}
+          {displayCategoryPrefix(item.category)}{item.name}
         </a>
       </li>
     {/each}
@@ -70,7 +80,7 @@
       left: 0;
     }
   }
-  .MilestoneProps {
+  .MilestoneList {
     list-style: none;
     flex: 1;
     display: flex;
