@@ -7,10 +7,12 @@
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "scraping:bcd": "node --loader ts-node/esm scraping/bcd.ts",
+    "prisma:migrate": "npx prisma migrate dev"
   },
   "devDependencies": {
-    "@mdn/browser-compat-data": "^5.2.39",
+    "@mdn/browser-compat-data": "^5.2.59",
     "@sveltejs/adapter-auto": "next",
     "@sveltejs/kit": "next",
     "@types/node": "^18.14.6",
