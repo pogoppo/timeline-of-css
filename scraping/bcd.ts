@@ -1,8 +1,22 @@
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
 import bcd from '@mdn/browser-compat-data' assert { type: 'json' };
 import type { BrowserName, CompatStatement } from '@mdn/browser-compat-data';
 
 const prisma = new PrismaClient()
+
+async function create(prismaInstance: any, tablename: string, param: { data: any }) {
+  try {
+    await prismaInstance[tablename].create(param);
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === "P2002") {
+        // 重複エラーは無視
+        return;
+      }
+    }
+    console.error(e);
+  }
+}
 
 async function createCSS(browser: BrowserName, prismaInstance: any) {
   for (const category in bcd.css) {
@@ -21,7 +35,7 @@ async function createCSS(browser: BrowserName, prismaInstance: any) {
       }
       version = !!version ? version : 0;
 
-      await prismaInstance.css.create({
+      await create(prismaInstance, "css", {
         data: {
           name,
           category,
@@ -38,7 +52,7 @@ async function createVersions(browser: BrowserName, prismaInstance: any) {
   const releases = bcd.browsers[browser]["releases"];
   for (const [version, item] of Object.entries(releases)) {
     const yyyymmdd = item["release_date"] ?? ""; // ソース元がYYYY-MM-DDのみで適当
-    await prismaInstance.versions.create({
+    await create(prismaInstance, "versions", {
       data: {
         browser,
         version: Number(version),

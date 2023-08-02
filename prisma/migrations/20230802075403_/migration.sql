@@ -1,12 +1,13 @@
 -- CreateTable
 CREATE TABLE "css" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
     "category" TEXT NOT NULL,
     "browser" TEXT NOT NULL,
     "version" REAL NOT NULL,
     "link" TEXT,
-    "note" TEXT
+    "note" TEXT,
+
+    PRIMARY KEY ("name", "category", "browser", "version")
 );
 
 -- CreateTable
