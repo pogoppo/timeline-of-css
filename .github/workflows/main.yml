@@ -1,0 +1,48 @@
+name: Scrape and Commit SQLite
+
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+      - name: Set up OpenSSL
+        run: apt-get update -y && apt-get install -y openssl
+      - name: Install dependencies
+        run: npm install
+      - name: Update browser-compat-data
+        run: npm install @mdn/browser-compat-data@latest
+      - name: Scrape and generate SQLite file
+        run: npm run scraping:bcd
+      - name: Save SQLite file as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: sqlite
+          path: static/css.sqlite
+  commit:
+    runs-on: ubuntu-latest
+    needs: scrape
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Download SQLite file artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: sqlite
+      - name: Configure Git
+        run: |
+          git config user.name "pogoppo"
+          git config user.email "5822076+pogoppo@users.noreply.github.com"
+      - name: Commit SQLite file
+        run: |
+          git add .
+          git commit -m "Update SQLite file"
+          git push
