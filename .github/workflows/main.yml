@@ -14,8 +14,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "16.x"
-      - name: Set up OpenSSL
-        run: apt-get update -y && apt-get install -y openssl
       - name: Install dependencies
         run: npm install
       - name: Update browser-compat-data
