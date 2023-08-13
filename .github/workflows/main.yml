@@ -35,6 +35,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: sqlite
+          path: static/css.sqlite
       - name: Configure Git
         run: |
           git config user.name "pogoppo"
