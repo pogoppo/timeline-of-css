@@ -18,6 +18,20 @@ async function create(prismaInstance: any, tablename: string, param: { data: any
   }
 }
 
+// https://zenn.dev/cohky/articles/prisma-to-truncate より
+async function truncate() {
+  const allProperties = Object.keys(prisma);
+
+  const modelNames = allProperties.filter(
+    (x) => !(typeof x === "string" && (x.startsWith("$") || x.startsWith("_")))
+  );
+
+  for (const modelName of modelNames) {
+    const query = `DELETE FROM ${modelName}`;
+    await prisma.$queryRawUnsafe(query);
+  };
+}
+
 async function createCSS(browser: BrowserName, prismaInstance: any) {
   for (const category in bcd.css) {
     for (const [name, item] of Object.entries(bcd.css[category])) {
@@ -29,7 +43,7 @@ async function createCSS(browser: BrowserName, prismaInstance: any) {
 
       let version: number;
       if (Array.isArray(support)) {
-        version = Number(support[0]["version_added"]);
+        version = Number(support[support.length - 1]["version_added"]);
       } else {
         version = Number(support["version_added"]);
       }
@@ -65,6 +79,7 @@ async function createVersions(browser: BrowserName, prismaInstance: any) {
 async function main() {
   const browser = "firefox";
   return await prisma.$transaction(async (prismaInstance) => {
+    await truncate();
     await createCSS(browser, prismaInstance);
     return createVersions(browser, prismaInstance);
   });
