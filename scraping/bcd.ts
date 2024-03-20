@@ -33,31 +33,52 @@ async function truncate() {
 }
 
 async function createCSS(browser: BrowserName, prismaInstance: any) {
+  const createItem = async (
+    category: string,
+    name: string,
+    item: any,
+    parent: string,
+  ) => {
+    const compat = (item as any)['__compat'] as CompatStatement;
+    const support = compat.support[browser];
+    if (support === undefined) {
+      return;
+    }
+
+    let version: number;
+    if (Array.isArray(support)) {
+      version = Number(support[support.length - 1]["version_added"]);
+    } else {
+      version = Number(support["version_added"]);
+    }
+    version = !!version ? version : 0;
+
+    await create(prismaInstance, "css", {
+      data: {
+        name,
+        category,
+        parent,
+        browser,
+        version,
+        link: compat["mdn_url"],
+        description: compat["description"],
+      }
+    });
+    console.log(`Create ${category}.${name} for ${browser} version ${version}`);
+
+    if (parent === name) {
+      const children = Object.keys(item).filter(k => k !== '__compat');
+      for (const childName of children) {
+        const parentName = name;
+        await createItem(category, childName, item[childName], parentName);
+      }
+    }
+  }
+
   for (const category in bcd.css) {
-    for (const [name, item] of Object.entries(bcd.css[category])) {
-      const compat = (item as any)['__compat'] as CompatStatement;
-      const support = compat.support[browser];
-      if (support === undefined) {
-        continue
-      }
-
-      let version: number;
-      if (Array.isArray(support)) {
-        version = Number(support[support.length - 1]["version_added"]);
-      } else {
-        version = Number(support["version_added"]);
-      }
-      version = !!version ? version : 0;
-
-      await create(prismaInstance, "css", {
-        data: {
-          name,
-          category,
-          browser,
-          version,
-          link: compat["mdn_url"]
-        },
-      });
+    const items = Object.entries(bcd.css[category]);
+    for (const [name, item] of items) {
+      await createItem(category, name, item, name);
     }
   }
 }
@@ -89,4 +110,5 @@ main()
   .catch(console.error)
   .finally(async () => {
     await prisma.$disconnect()
+    console.log(`Finish scraping.`);
   });

@@ -11,14 +11,15 @@ datasource db {
 }
 
 model css {
-  name      String
-  category  String
-  browser   String
-  version   Float
-  link      String?
-  note      String?
+  name         String
+  category     String
+  parent       String
+  browser      String
+  version      Float
+  link         String?
+  description  String?
 
-  @@id([name, category, browser, version])
+  @@id([name, category, parent, browser, version])
   @@index([browser, version])
 }
 
