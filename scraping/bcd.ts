@@ -47,9 +47,11 @@ async function createCSS(browser: BrowserName, prismaInstance: any) {
 
     let version: number;
     if (Array.isArray(support)) {
-      version = Number(support[support.length - 1]["version_added"]);
+      const versionString = String(support[support.length - 1]["version_added"]);
+      version = Number(versionString?.match(/(\d+)/)?.[0]);
     } else {
-      version = Number(support["version_added"]);
+      const versionString = String(support["version_added"]);
+      version = Number(versionString?.match(/(\d+)/)?.[0]);
     }
     version = !!version ? version : 0;
 

@@ -1,3 +1,4 @@
+@use "src/lib/scss/responsive.scss";
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700;900&display=swap");
 
 :root {
@@ -8,6 +9,7 @@
   --color-font-reverse: #000;
   --color-font-accent: rgb(102, 197, 241);
   --color-font-link: rgb(72, 221, 255);
+  --color-label-accent: rgb(102, 241, 206);
   --color-bg: #000;
   --color-bg-contents: #333;
   --font-family-accent-sans: "Montserrat", sans-serif;
@@ -15,6 +17,9 @@
   color: var(--color-font-default);
   font-family: sans-serif;
   font-size: 16px;
+  @include responsive.mq(to-S) {
+    font-size: 14px;
+  }
 }
 
 html {
@@ -28,4 +33,7 @@ body {
 
 a {
   text-decoration: none;
+  &[href^="http"] {
+    color: var(--color-font-link);
+  }
 }

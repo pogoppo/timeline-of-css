@@ -19,7 +19,7 @@ model css {
   link         String?
   description  String?
 
-  @@id([name, category, parent, browser, version])
+  @@id([name, category, parent, browser])
   @@index([browser, version])
 }
 

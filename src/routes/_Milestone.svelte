@@ -1,17 +1,8 @@
 <script lang="ts">
   import type { Fragment } from "./_timeline";
+  import MilestoneItem from "./_MilestoneItem.svelte";
 
   export let fragment: Fragment;
-
-  const displayCategoryPrefix = (category: string) => {
-    switch (category) {
-      case "at-rules":
-        return "@";
-      case "selectors":
-        return ":";
-    }
-    return "";
-  };
 
   const displayReleaseDate = (date: Date) => {
     const month = date.toLocaleString("en-US", { month: "2-digit" });
@@ -25,16 +16,7 @@
   </h3>
   <ul class="MilestoneList">
     {#each fragment.items as item}
-      <li class="MilestoneList__item">
-        <a
-          href={item.link}
-          target="_blank"
-          rel="noopener"
-          class="MilestoneList__link"
-        >
-          {displayCategoryPrefix(item.category)}{item.name}
-        </a>
-      </li>
+      <MilestoneItem {item} />
     {/each}
   </ul>
 </section>
@@ -45,6 +27,7 @@
     display: flex;
     align-items: flex-start;
     column-gap: 1.5rem;
+    max-width: 100vw;
     line-height: 2rem;
     &__release {
       position: relative;
@@ -54,6 +37,9 @@
       color: var(--color-font-reverse);
       font-family: Arial, Helvetica, sans-serif;
       font-size: 1.5rem;
+      @include responsive.mq(to-S) {
+        padding: 0 0.2rem 0 0.5rem;
+      }
       &::after {
         content: "";
         display: block;
@@ -86,19 +72,13 @@
     display: flex;
     flex-wrap: wrap;
     column-gap: 1rem;
+    row-gap: 0.25rem;
+    position: relative;
     margin: 0;
     padding: 0 1rem;
     background-color: rgba(255, 255, 255, 0.05);
-    &__item {
-      display: block;
-    }
-    &__link {
-      color: var(--color-font-link);
-      border-bottom: 1px dashed var(--color-font-link);
-      &:hover {
-        color: var(--color-font-default);
-        border-color: var(--color-font-default);
-      }
+    @include responsive.mq(to-S) {
+      padding: 0 0.5rem;
     }
   }
 </style>

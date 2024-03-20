@@ -59,8 +59,8 @@
       }
       > h4 {
         margin: 0;
-        color: var(--color-font-accent);
         font-family: var(--font-family-accent-sans);
+        font-weight: bold;
       }
       > svg {
         width: 20px;

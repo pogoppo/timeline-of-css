@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, setContext } from "svelte";
+  import { writable } from "svelte/store";
 
   import type CSS from "$lib/repositories/css";
   import { createTimeline, type Timeline } from "./_timeline";
@@ -10,6 +11,10 @@
   let historyGradient: Function;
   const historyGradientFrom: [number, number, number] = [255, 54, 71];
   const historyGradientTo: [number, number, number] = [255, 244, 79];
+  const activatedDetails = writable<HTMLElement | null>();
+
+  setContext("CSS", items);
+  setContext("activatedDetails", activatedDetails);
 
   function* createGradient(
     rgb1: [number, number, number],
@@ -35,6 +40,15 @@
       const rgb = historyPathGradient.next().value?.join(",");
       return `rgb(${rgb})`;
     };
+
+    window.addEventListener("click", (event) => {
+      if ($activatedDetails) {
+        const target = event.target as HTMLElement;
+        if (!$activatedDetails.contains(target)) {
+          activatedDetails.set(null);
+        }
+      }
+    });
   });
 </script>
 
@@ -86,6 +100,10 @@
       font-family: var(--font-family-accent-sans);
       font-size: 4rem;
       font-weight: 900;
+      @include responsive.mq(to-S) {
+        padding: 0 0.75rem;
+        font-size: 3.5rem;
+      }
       > a {
         color: inherit;
       }

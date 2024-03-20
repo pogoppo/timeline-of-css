@@ -3,8 +3,10 @@ import type { Database } from "sql.js";
 export type Item = {
   name: string;
   category: string;
+  parent: string;
   version: number;
   link: string;
+  description: string;
   releaseDate: string;
 }
 
@@ -31,21 +33,35 @@ export default class {
     return new Date(release_date as number);
   }
 
-  *orderByVersion(asc: boolean = false) {
+  *orderByVersion() {
     const stmt = this.#db.prepare(`
-      SELECT css.name, css.category, css.version, css.link, ver.release_date
+      SELECT css.name, css.category, css.parent, css.version, css.link, css.description, ver.release_date
       FROM css
       INNER JOIN versions as ver
       ON css.browser = ver.browser AND css.version = ver.version
-      WHERE css.version > 0 AND css.category != 'types'
+      WHERE css.version > 0
       ORDER BY css.version DESC, css.name
     `);
 
     while (stmt.step()) {
-      const [name, category, version, link, releaseDate] = stmt.get();
-      yield { name, category, version, link, releaseDate } as Item;
+      const [name, category, parent, version, link, description, releaseDate] = stmt.get();
+      yield { name, category, parent, version, link, description, releaseDate } as Item;
     };
 
     stmt.free();
+  }
+
+  parent(parentName: string) {
+    const stmt = this.#db.prepare(`
+      SELECT name, category, link, description
+      FROM css
+      WHERE version > 0 AND name = :parentName AND parent = :parentName
+    `, { ':parentName': parentName });
+
+    stmt.step();
+    const { name, category, link, description } = stmt.getAsObject();
+    stmt.free();
+
+    return { name, category, link, description };
   }
 }
