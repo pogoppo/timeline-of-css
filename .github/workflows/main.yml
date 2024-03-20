@@ -6,11 +6,11 @@ on:
   workflow_dispatch:
     inputs:
       job:
-        description: 'Select job'
+        description: "Select job"
         required: true
         type: choice
         options:
-          - ''
+          - ""
           - scrape
           - commit
 
@@ -23,7 +23,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: "20.x"
       - name: Install dependencies
         run: npm install
       - name: Update browser-compat-data
