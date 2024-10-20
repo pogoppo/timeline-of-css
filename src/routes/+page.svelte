@@ -27,7 +27,7 @@
   {#if items}
     <Timeline {items} />
   {:else}
-    <div class="centering" />
+    <div class="centering"></div>
   {/if}
 </main>
 

@@ -20,16 +20,19 @@
 <li class="MilestoneItem" data-category={item.category}>
   <aside
     class="MilestoneItem__details"
-    class:--active={$activatedDetails === detailsElement}
+    class:MilestoneItem__details--active={$activatedDetails === detailsElement}
     bind:this={detailsElement}
   >
     <h4>
-      <i class="MilestoneItem__category-label" data-category={item.category} />
+      <i class="MilestoneItem__category-label" data-category={item.category}
+      ></i>
       {#if item.parent == item.name}
         <span class="MilestoneItem__name">{item.name}</span>
       {:else}
         <span class="MilestoneItem__name">{item.parent}</span>
-        <span class="MilestoneItem__name --small">{item.name}</span>
+        <span class="MilestoneItem__name MilestoneItem__name--small"
+          >{item.name}</span
+        >
       {/if}
     </h4>
     <p>
@@ -48,7 +51,7 @@
         <i
           class="MilestoneItem__category-label"
           data-category={parentItem.category}
-        />
+        ></i>
         {parentItem.name}
       </h4>
       {#if parentItem.link}
@@ -70,7 +73,9 @@
       <span class="MilestoneItem__name">{item.name}</span>
     {:else}
       <span class="MilestoneItem__name">{item.parent}</span>
-      <span class="MilestoneItem__name --small">{item.name}</span>
+      <span class="MilestoneItem__name MilestoneItem__name--small"
+        >{item.name}</span
+      >
     {/if}
   </button>
 </li>
@@ -125,7 +130,7 @@
       }
     }
     &__name {
-      &.--small {
+      &--small {
         font-size: 0.8em;
         word-break: break-all;
         line-height: 1;
@@ -143,7 +148,7 @@
       border: 4px solid rgba(255, 255, 255, 0.3);
       box-sizing: border-box;
       color: var(--color-font-default);
-      &:not(.--active) {
+      &:not(&--active) {
         display: none;
       }
       > h4 {
@@ -178,7 +183,7 @@
         }
       }
     }
-    &__details.--active ~ &__button {
+    &__details--active ~ &__button {
       color: var(--color-font-default);
       border-bottom-style: solid;
       border-color: var(--color-font-default);

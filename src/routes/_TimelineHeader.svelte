@@ -24,8 +24,9 @@
   </div>
   <a
     href="https://github.com/pogoppo/timeline-of-css"
-    class="TimelineHeader__item --align-end"
+    class="TimelineHeader__item TimelineHeader__item--align-end"
     style:opacity="0.75"
+    aria-label="GitHub"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -54,7 +55,7 @@
       align-items: baseline;
       column-gap: 0.5rem;
       color: inherit;
-      &.--align-end {
+      &--align-end {
         margin-left: auto;
       }
       > h4 {

@@ -52,7 +52,7 @@
   });
 </script>
 
-<anchor-point id="history" />
+<anchor-point id="history"></anchor-point>
 <article class="Timeline">
   {#if history}
     {#each history as milestone}
