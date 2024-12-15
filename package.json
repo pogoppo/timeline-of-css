@@ -11,7 +11,7 @@
     "prisma:migrate": "npx prisma migrate dev"
   },
   "devDependencies": {
-    "@mdn/browser-compat-data": "latest",
+    "@mdn/browser-compat-data": "^5.6.24",
     "@sveltejs/adapter-auto": "^3.3.1",
     "@sveltejs/adapter-vercel": "^5.5.0",
     "@sveltejs/kit": "^2.9.0",

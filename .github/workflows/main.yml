@@ -24,10 +24,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "20.x"
+      - name: Update browser-compat-data
+        run: npm install -D @mdn/browser-compat-data@latest
       - name: Install dependencies
         run: npm install
-      - name: Update browser-compat-data
-        run: npm install @mdn/browser-compat-data@latest
       - name: Scrape and generate SQLite file
         run: npm run scraping:bcd
       - name: Save SQLite file as artifact
