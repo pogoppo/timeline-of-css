@@ -4,19 +4,11 @@ on:
   schedule:
     - cron: "0 0 * * 0"
   workflow_dispatch:
-    inputs:
-      job:
-        description: "Select job"
-        required: true
-        type: choice
-        options:
-          - ""
-          - scrape
-          - commit
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -37,6 +29,7 @@ jobs:
           path: static/css.sqlite
   commit:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs: scrape
     steps:
       - name: Checkout code
