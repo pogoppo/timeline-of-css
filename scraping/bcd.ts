@@ -1,16 +1,21 @@
-import { Prisma, PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import bcd from '@mdn/browser-compat-data' assert { type: 'json' };
 import type { BrowserName, CompatStatement } from '@mdn/browser-compat-data';
 
-const prisma = new PrismaClient()
-type PrismaInstance = Omit<PrismaClient<Prisma.PrismaClientOptions, never, any>, "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends">
+const prisma = new PrismaClient({
+  log: ['info', 'warn', 'error'],
+})
+type PrismaInstance = Omit<PrismaClient, "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends">
 
 // https://zenn.dev/cohky/articles/prisma-to-truncate より
 async function truncate() {
+  // スキーマで定義したテーブル名に一致するプロパティのみを取得
   const allProperties = Object.keys(prisma);
-
   const modelNames = allProperties.filter(
-    (x) => !(typeof x === "string" && (x.startsWith("$") || x.startsWith("_")))
+    (x) => typeof (prisma as any)[x] === 'object' &&
+      (prisma as any)[x].create !== undefined &&
+      !x.startsWith("$") &&
+      !x.startsWith("_")
   );
 
   for (const modelName of modelNames) {
